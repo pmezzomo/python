@@ -1,32 +1,47 @@
-def LeituraPlanilha(planilha):
-    max_linhas = planilha.max_row
-    max_colunas = planilha.max_column
+#######################################
+# Criando um arquivo Excel (workbook) #
+#######################################
 
-    for l in range(1, max_linhas+1):
-        for c in range(1, max_colunas+1):
-            print(planilha.cell(row=l, column=c).value, end=' | ')
-        print('\n')
-    
+from openpyxl import Workbook
 
-from openpyxl import load_workbook
+# arquivo1 - está com a referência para o objeto 'Workbook'
+arquivo1 = Workbook()  # Workbook() - função construtor
 
-arquivo_existente = load_workbook(filename = 'Exemplo.xlsx', read_only=False)
+# planilha2 - está com a referência para o objeto da aba ativa
+# que será renomeada para 'Aba01'
+planilha1 = arquivo1.active
 
-#plan1 = arquivo_existente['Plan1']
-#print(plan1['A1'].value)
+planilha1.title = 'Aba01'
 
-lista_planilhas = arquivo_existente.sheetnames
+#######################################
+# Criando uma nova aba no Workbook    #
+#######################################
 
-for p in lista_planilhas:
-    plan = arquivo_existente[p]
-    print('Aba - ', plan.title, ': \n')
-    LeituraPlanilha(plan)
+planilha3 = arquivo1.create_sheet('Aba03')
 
-for p in lista_planilhas:
-    plan = arquivo_existente[p]
-    arquivo_existente.copy_worksheet(plan)
+planilha2 = arquivo1.create_sheet('Aba02', 10)
 
-arquivo_existente.save('Exemplo.xlsx')
+planilha4 = arquivo1.create_sheet('Aba04')
 
+planilha4['A1'] = 'Nome 1'
+planilha4['A2'] = 'Nome 2'
+planilha4['A3'] = 'Nome 3'
+planilha4['B1'] = 18
+planilha4['B2'] = 14
+planilha4['B3'] = 16
+planilha4['B4'] = '=AVERAGE(B1:B3)'
+
+conjunto_valores = [(1,), (2,), (3,)]
+
+for linha in conjunto_valores:    planilha2.append(linha)
+
+planilha1.cell(row=2, column=2, value='OLA')
+
+planilha5 = arquivo1.create_sheet('Aba05')
+
+print(arquivo1.sheetnames)
+print(type(arquivo1.sheetnames))
+
+arquivo1.save('ArquivoExemplo01.xlsx')
 
 
